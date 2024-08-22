@@ -1,0 +1,44 @@
+.home-container {
+    padding: 20px;
+    text-align: center;
+    background-color: #f8f9fa;
+  }
+  
+  .home-header {
+    margin-bottom: 40px;
+  }
+  
+  .home-header h1 {
+    color: #007bff;
+    font-size: 2.5em;
+  }
+  
+  .home-about,
+  .home-features {
+    margin-bottom: 40px;
+  }
+  
+  .home-about p,
+  .home-features ul {
+    font-size: 1.2em;
+    color: #555;
+  }
+  
+  .home-features ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .home-features ul li {
+    background: url('https://wallpapercave.com/wp/wp9164084.jpg') no-repeat left center;
+    background-size: 20px;
+    padding-left: 30px;
+    margin-bottom: 10px;
+  }
+  
+  .home-footer {
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #777;
+  }
+  

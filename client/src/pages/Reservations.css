@@ -1,0 +1,30 @@
+.reservations-container {
+    padding: 20px;
+    background-color: #f5f5f5;
+  }
+  
+  .title {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .reservation-list {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .reservation {
+    padding: 10px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    margin-bottom: 10px;
+    border-radius: 5px;
+  }
+  
+  .reservation p {
+    margin: 0;
+    font-size: 16px;
+    color: #111;
+  }
+  
