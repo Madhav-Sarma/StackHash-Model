@@ -17,10 +17,11 @@ function App() {
         <Route path="/bookings" element={<Bookings />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/movies/:name" element={<MovieDetails />} />  {/* Updated */}
+        <Route path="/movies/:name" element={<MovieDetails />} />
         <Route path="/register" element={<Register />} />
       </Routes>
     </Router>
+    
   );
 }
 
