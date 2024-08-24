@@ -7,20 +7,21 @@ const getMovies = async (db) => {
     return await db.collection('movies').find().toArray();
 };
 
-const getMovieById = async (db, id) => {
-    return await db.collection('movies').findOne({ _id: new ObjectId(id) });
+// Function to get a movie by its name
+const getMovieByName = async (db, name) => {
+    return await db.collection('movies').findOne({ name: name });
 };
 
 const addMovie = async (db, movie) => {
     return await db.collection('movies').insertOne(movie);
 };
 
-const updateMovie = async (db, id, movie) => {
-    return await db.collection('movies').updateOne({ _id: new ObjectId(id) }, { $set: movie });
+const updateMovie = async (db, name, movie) => {
+    return await db.collection('movies').updateOne({ name: name }, { $set: movie });
 };
 
-const deleteMovie = async (db, id) => {
-    return await db.collection('movies').deleteOne({ _id: new ObjectId(id) });
+const deleteMovie = async (db, name) => {
+    return await db.collection('movies').deleteOne({ name: name });
 };
 
 // Routes
@@ -33,9 +34,9 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:name', async (req, res) => {
     try {
-        const movie = await getMovieById(req.db, req.params.id);
+        const movie = await getMovieByName(req.db, req.params.name);
         if (movie) {
             res.json(movie);
         } else {
@@ -56,20 +57,28 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:name', async (req, res) => {
     try {
         const movie = req.body;
-        const result = await updateMovie(req.db, req.params.id, movie);
-        res.json(result);
+        const result = await updateMovie(req.db, req.params.name, movie);
+        if (result.modifiedCount === 1) {
+            res.json({ message: 'Movie updated successfully' });
+        } else {
+            res.status(404).json({ error: 'Movie not found' });
+        }
     } catch (err) {
         res.status(500).json({ error: 'Failed to update movie' });
     }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:name', async (req, res) => {
     try {
-        const result = await deleteMovie(req.db, req.params.id);
-        res.json(result);
+        const result = await deleteMovie(req.db, req.params.name);
+        if (result.deletedCount === 1) {
+            res.json({ message: 'Movie deleted successfully' });
+        } else {
+            res.status(404).json({ error: 'Movie not found' });
+        }
     } catch (err) {
         res.status(500).json({ error: 'Failed to delete movie' });
     }

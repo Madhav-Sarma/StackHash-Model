@@ -1,11 +1,12 @@
 const express = require('express');
-const { MongoClient, ObjectId } = require('mongodb');
+const { MongoClient } = require('mongodb');
 require('dotenv').config();
-
-const verifyToken = require('./middleware/verifyToken');
+const cors = require('cors');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
+app.use(cors());
+app.use(express.json()); // To parse JSON bodies
 
 // MongoDB connection setup
 const url = process.env.MONGODB_URI;
@@ -27,11 +28,12 @@ MongoClient.connect(url, { useUnifiedTopology: true })
         const movieRoutes = require('./apis/movie-api');
         const showRoutes = require('./apis/show-api');
         const userRoutes = require('./apis/user-api');
-
+        const theatreRoutes=require('./apis/theatre-api');
         // Use API routes
         app.use('/api/movies', movieRoutes);
         app.use('/api/shows', showRoutes);
         app.use('/api/users', userRoutes);
+        app.use('/api/theatres',theatreRoutes);
 
         // Start the server
         app.listen(port, () => {

@@ -1,46 +1,62 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function MovieDetails() {
-  const { id } = useParams();
+  const { name } = useParams();
   const [movie, setMovie] = useState(null);
-  const [showtimes, setShowtimes] = useState([]);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();  // Hook to programmatically navigate
 
   useEffect(() => {
-    // Replace with your API call to fetch movie details and showtimes
-    fetch(`https://api.sampleapis.com/movies/action-adventure/${id}`)
-      .then(response => response.json())
-      .then(data => {
-        setMovie(data.movie);
-        setShowtimes(data.showtimes);
-      });
-  }, [id]);
+    const fetchMovieDetails = async () => {
+      try {
+        const res = await axios.get(`http://localhost:5000/api/movies/${name}`);
+        setMovie(res.data);
+      } catch (error) {
+        console.error('Error fetching movie details:', error);
+        setError('Unable to load movie details from the API.');
+      }
+    };
+
+    fetchMovieDetails();
+  }, [name]);
+
+  if (error) {
+    return <div className="alert alert-danger">{error}</div>;
+  }
 
   if (!movie) {
     return <div>Loading...</div>;
   }
 
+  const handleBookNow = () => {
+    navigate('/bookings');  // Redirect to Bookings page
+  };
+
   return (
-    <div>
-      <h1>{movie.title}</h1>
-      <img src={movie.image} alt={movie.title} />
-      <p>{movie.description}</p>
-      <h3>Showtimes</h3>
-      {showtimes.length === 0 ? (
-        <p>No showtimes available.</p>
-      ) : (
-        <div className="list-group">
-          {showtimes.map(show => (
-            <Link
-              to={`/showtimes/${movie.id}`}
-              className="list-group-item list-group-item-action"
-              key={show.id}
-            >
-              {show.theatreName} - {show.time} - {show.language} - {show.format}
-            </Link>
-          ))}
+    <div className="container">
+      <div className="row">
+        <div className="col-md-6">
+          <img
+            src={movie.image}
+            className="img-fluid"
+            alt={movie.name}
+            style={{ height: '500px', objectFit: 'cover' }}
+          />
         </div>
-      )}
+        <div className="col-md-6">
+          <h2>{movie.name}</h2>
+          <p><strong>Genre:</strong> {movie.genre}</p>
+          <p><strong>Release Date:</strong> {movie.releaseDate}</p>
+          <p><strong>Description:</strong> {movie.description}</p>
+          <p><strong>Director:</strong> {movie.director}</p>
+          <p><strong>Rating:</strong> {movie.rating}/10</p>
+          <button className="btn btn-primary mt-3" onClick={handleBookNow}>
+            Book Now
+          </button>  {/* Book Now button */}
+        </div>
+      </div>
     </div>
   );
 }
