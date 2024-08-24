@@ -1,0 +1,46 @@
+/* Navbar.css */
+
+/* General styling for the navbar */
+.navbar {
+    background-color: #343a40; /* Dark background for the navbar */
+    border-bottom: 2px solid #007bff; /* Blue border at the bottom */
+  }
+  
+  .navbar-brand {
+    font-size: 1.5rem; /* Larger font size for the brand */
+    font-weight: bold; /* Bold font for better emphasis */
+    color: #fff; /* White color for the brand text */
+    transition: color 0.3s; /* Smooth transition for hover effect */
+  }
+  
+  .navbar-brand:hover {
+    color: #007bff; /* Blue color on hover */
+  }
+  
+  .navbar-toggler {
+    border: none; /* Remove default border */
+  }
+  
+  .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba%280, 0, 0, 0.5%29' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E"); /* White color for the toggler icon */
+  }
+  
+  .navbar-nav .nav-item {
+    margin-left: 10px; /* Spacing between nav items */
+  }
+  
+  .nav-link {
+    color: #fff !important; /* White color for nav links */
+    font-size: 1.1rem; /* Slightly larger font size */
+    transition: color 0.3s; /* Smooth transition for hover effect */
+  }
+  
+  .nav-link:hover {
+    color: #007bff !important; /* Blue color on hover */
+  }
+  
+  /* Responsive collapse for navbar */
+  .navbar-collapse {
+    justify-content: flex-end; /* Align navbar items to the right */
+  }
+  
