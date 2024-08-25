@@ -1,32 +1,42 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
-
+import { FaFilm, FaTheaterMasks, FaClock, FaTicketAlt, FaUser } from 'react-icons/fa';
 
 function Navbar() {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <div className="container-fluid">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div className="container">
         <Link className="navbar-brand" to="/">MovieBooking</Link>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav">
+          <ul className="navbar-nav ms-auto">
             <li className="nav-item">
-              <Link className="nav-link" to="/movies">Movies</Link>
+              <Link className="nav-link" to="/movies">
+                <FaFilm className="icon" /> Movies
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/theatres">Theatres</Link>
+              <Link className="nav-link" to="/theatres">
+                <FaTheaterMasks className="icon" /> Theatres
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/showtimes">Showtimes</Link>
+              <Link className="nav-link" to="/showtimes">
+                <FaClock className="icon" /> Showtimes
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/reservations">Reservations</Link>
+              <Link className="nav-link" to="/reservations">
+                <FaTicketAlt className="icon" /> Reservations
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/users">Users</Link>
+              <Link className="nav-link" to="/users">
+                <FaUser className="icon" /> Users
+              </Link>
             </li>
           </ul>
         </div>
