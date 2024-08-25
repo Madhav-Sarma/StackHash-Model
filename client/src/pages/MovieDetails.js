@@ -31,7 +31,7 @@ function MovieDetails() {
   }
 
   const handleBookNow = () => {
-    navigate('/bookings');  // Redirect to Bookings page
+    navigate('/theatres');  // Redirect to Bookings page
   };
 
   return (

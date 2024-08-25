@@ -1,32 +1,52 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import './Movies.css';
 
-const Movies = () => {
-  const [movies, setMovies] = useState([]);
+function Movies() {
+  const [movies, setMovies] = useState([]); // State for all movies
+  const [error, setError] = useState(null); // State for error handling
+  const navigate = useNavigate(); // Hook for navigation
 
   useEffect(() => {
-    axios
-      .get("/api/movies")
-      .then((response) => {
-        setMovies(response.data);
-      })
-      .catch((error) => {
-        console.error("There was an error fetching the movies!", error);
-      });
+    const fetchMovies = async () => {
+      try {
+        const res = await axios.get('http://localhost:5000/api/movies'); // Fetch all movies
+        setMovies(res.data);
+      } catch (error) {
+        console.error('Error fetching movies:', error);
+        setError('Unable to load movies from the API.');
+      }
+    };
+
+    fetchMovies(); // Fetch movies on component mount
   }, []);
 
+  if (error) {
+    return <div className="alert alert-danger">{error}</div>; // Display error message
+  }
+
+  if (movies.length === 0) {
+    return <div>Loading...</div>; // Display loading state
+  }
+
   return (
-    <div>
-      <h2>Now Showing</h2>
-      <ul>
+    <div className="movies-container">
+      <h1>Movies</h1>
+      <div className="movies-grid">
         {movies.map((movie) => (
-          <li key={movie._id}>
-            {movie.title} - {movie.genre}
-          </li>
+          <div key={movie._id} className="movie-card" onClick={() => navigate(`/movies/${movie.name}`)}>
+            <img src={movie.image} alt={movie.name} className="movie-image" />
+            <div className="movie-details">
+              <h2>{movie.name}</h2>
+              <p>{movie.genre}</p>
+              <p>{movie.releaseDate}</p>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
-};
+}
 
 export default Movies;
