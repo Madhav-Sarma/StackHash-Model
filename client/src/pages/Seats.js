@@ -25,7 +25,7 @@ function Seats() {
   };
 
   const handleYes = () => {
-    window.location.href = 'https://razorpay.me/@mymovieticketbookingapp?amount=zgioswZa9n4qt5x9yD7i%2BQ%3D%3D';
+    window.location.href = 'https://razorpay.me/@cineSphere?amount=zgioswZa9n4qt5x9yD7i%2BQ%3D%3D';
   };
 
   const handleNo = () => {

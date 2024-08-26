@@ -2,12 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
 import { FaFilm, FaTheaterMasks, FaClock, FaTicketAlt, FaUser } from 'react-icons/fa';
+import logo from './images/logo.png'; // Import the logo image
 
 function Navbar() {
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav className="navbar navbar-expand-lg navbar-dark">
       <div className="container">
-        <Link className="navbar-brand" to="/">CineSphere</Link>
+        <Link className="navbar-brand" to="/">
+          <img src={logo} alt="Logo" width='250px' className="navbar-logo" /> {/* Add the logo here */}
+        </Link>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
@@ -46,3 +49,4 @@ function Navbar() {
 }
 
 export default Navbar;
+
