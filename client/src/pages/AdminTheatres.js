@@ -4,18 +4,20 @@ import './Admin.css';
 function AdminTheatres() {
   const [theatres, setTheatres] = useState([]);
   const [newTheatre, setNewTheatre] = useState({
+    theatreId: '',
     name: '',
-    location: '',
-    seats: '',
+    numberOfRows: '',
+    numberOfColumns: '',
   });
 
   useEffect(() => {
     const fakeTheatres = [
       {
         id: 1,
+        theatreId: 'T001',
         name: 'Theatre 1',
-        location: 'Location 1',
-        seats: '100',
+        numberOfRows: '10',
+        numberOfColumns: '20',
       },
     ];
 
@@ -34,9 +36,10 @@ function AdminTheatres() {
     const updatedTheatres = [...theatres, { id: theatres.length + 1, ...newTheatre }];
     setTheatres(updatedTheatres);
     setNewTheatre({
+      theatreId: '',
       name: '',
-      location: '',
-      seats: '',
+      numberOfRows: '',
+      numberOfColumns: '',
     });
   };
 
@@ -54,25 +57,33 @@ function AdminTheatres() {
           <input
             type="text"
             className="form-control"
+            name="theatreId"
+            placeholder="Theatre ID"
+            value={newTheatre.theatreId}
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            className="form-control mt-2"
             name="name"
             placeholder="Theatre Name"
             value={newTheatre.name}
             onChange={handleChange}
           />
           <input
-            type="text"
+            type="number"
             className="form-control mt-2"
-            name="location"
-            placeholder="Location"
-            value={newTheatre.location}
+            name="numberOfRows"
+            placeholder="Number of Rows"
+            value={newTheatre.numberOfRows}
             onChange={handleChange}
           />
           <input
-            type="text"
+            type="number"
             className="form-control mt-2"
-            name="seats"
-            placeholder="Number of Seats"
-            value={newTheatre.seats}
+            name="numberOfColumns"
+            placeholder="Number of Columns"
+            value={newTheatre.numberOfColumns}
             onChange={handleChange}
           />
           <button className="btn btn-success mt-2" onClick={handleAddTheatre}>
@@ -85,18 +96,20 @@ function AdminTheatres() {
       <table className="table table-bordered">
         <thead>
           <tr>
+            <th>Theatre ID</th>
             <th>Name</th>
-            <th>Location</th>
-            <th>Seats</th>
+            <th>Number of Rows</th>
+            <th>Number of Columns</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {theatres.map((theatre) => (
             <tr key={theatre.id}>
+              <td>{theatre.theatreId}</td>
               <td>{theatre.name}</td>
-              <td>{theatre.location}</td>
-              <td>{theatre.seats}</td>
+              <td>{theatre.numberOfRows}</td>
+              <td>{theatre.numberOfColumns}</td>
               <td>
                 <button className="btn btn-danger" onClick={() => handleDeleteTheatre(theatre.id)}>
                   Delete

@@ -4,12 +4,11 @@ import './Admin.css';
 function AdminReservations() {
   const [reservations, setReservations] = useState([]);
   const [newReservation, setNewReservation] = useState({
-    movieId: '',
+    movieName: '',
     theatreId: '',
     date: '',
     startAt: '',
     seats: '',
-    orderId: '',
     ticketPrice: '',
     total: '',
     name: '',
@@ -20,12 +19,11 @@ function AdminReservations() {
     const fakeReservations = [
       {
         id: 1,
-        movieId: 1,
+        movieName: 'Inception',
         theatreId: 1,
         date: '2024-08-10',
         startAt: '18:00',
         seats: 'A1,A2',
-        orderId: 'ORD001',
         ticketPrice: '300',
         total: '600',
         name: 'John Doe',
@@ -48,12 +46,11 @@ function AdminReservations() {
     const updatedReservations = [...reservations, { id: reservations.length + 1, ...newReservation }];
     setReservations(updatedReservations);
     setNewReservation({
-      movieId: '',
+      movieName: '',
       theatreId: '',
       date: '',
       startAt: '',
       seats: '',
-      orderId: '',
       ticketPrice: '',
       total: '',
       name: '',
@@ -75,9 +72,9 @@ function AdminReservations() {
           <input
             type="text"
             className="form-control"
-            name="movieId"
-            placeholder="Movie ID"
-            value={newReservation.movieId}
+            name="movieName"
+            placeholder="Movie Name"
+            value={newReservation.movieName}
             onChange={handleChange}
           />
           <input
@@ -108,14 +105,6 @@ function AdminReservations() {
             name="seats"
             placeholder="Seats"
             value={newReservation.seats}
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            className="form-control mt-2"
-            name="orderId"
-            placeholder="Order ID"
-            value={newReservation.orderId}
             onChange={handleChange}
           />
           <input
@@ -160,12 +149,11 @@ function AdminReservations() {
       <table className="table table-bordered">
         <thead>
           <tr>
-            <th>Movie ID</th>
+            <th>Movie Name</th>
             <th>Theatre ID</th>
             <th>Date</th>
             <th>Start Time</th>
             <th>Seats</th>
-            <th>Order ID</th>
             <th>Total Price</th>
             <th>Customer Name</th>
             <th>Phone</th>
@@ -175,12 +163,11 @@ function AdminReservations() {
         <tbody>
           {reservations.map((reservation) => (
             <tr key={reservation.id}>
-              <td>{reservation.movieId}</td>
+              <td>{reservation.movieName}</td>
               <td>{reservation.theatreId}</td>
               <td>{reservation.date}</td>
               <td>{reservation.startAt}</td>
               <td>{reservation.seats}</td>
-              <td>{reservation.orderId}</td>
               <td>{reservation.total}</td>
               <td>{reservation.name}</td>
               <td>{reservation.phone}</td>

@@ -3,7 +3,11 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
-import Movies from "./pages/Movies";
+import AdminMovies from "./pages/AdminMovies";
+import AdminShowtimes from "./pages/AdminShowtimes";
+import AdminReservations from "./pages/AdminReservations";
+import AdminUsers from "./pages/AdminUsers";
+import AdminTheatres from "./pages/AdminTheatres";
 import MovieDetails from "./pages/MovieDetails";
 import Theatres from "./pages/Theatres";
 import Showtimes from "./pages/Showtimes";
@@ -12,7 +16,6 @@ import Reservations from "./pages/Reservations";
 import Users from "./pages/Users";
 import Admin from "./pages/Admin";
 import Login from "./components/Login";
-import Register from "./components/Register";
 import './App.css'; // Import App CSS
 
 
@@ -23,7 +26,11 @@ function App() {
       <div className="container">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/movies" element={<Movies />} />
+          <Route path="/adminMovies" element={<AdminMovies />} />
+          <Route path="/adminShowtimes" element={<AdminShowtimes />} />
+          <Route path="/adminReservations" element={<AdminReservations />} />
+          <Route path="/adminUsers" element={<AdminUsers />} />
+          <Route path="/adminTheatres" element={<AdminTheatres   />} />
           <Route path="/movies/:name" element={<MovieDetails />} />
           <Route path="/theatres" element={<Theatres />} />
           <Route path="/showtimes/:movieId" element={<Showtimes />} />
@@ -32,7 +39,6 @@ function App() {
           <Route path="/users" element={<Users />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
         </Routes>
       </div>
       <Footer />
