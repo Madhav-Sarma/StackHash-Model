@@ -1,10 +1,13 @@
+// server.js
+
 const express = require('express');
 const { MongoClient } = require('mongodb');
 require('dotenv').config();
 const cors = require('cors');
+const crypto = require('crypto'); // Add this line
 
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json()); // To parse JSON bodies
 
@@ -28,12 +31,28 @@ MongoClient.connect(url, { useUnifiedTopology: true })
         const movieRoutes = require('./apis/movie-api');
         const showRoutes = require('./apis/show-api');
         const userRoutes = require('./apis/user-api');
-        const theatreRoutes=require('./apis/theatre-api');
+        const theatreRoutes = require('./apis/theatre-api');
+
         // Use API routes
         app.use('/api/movies', movieRoutes);
         app.use('/api/shows', showRoutes);
         app.use('/api/users', userRoutes);
-        app.use('/api/theatres',theatreRoutes);
+        app.use('/api/theatres', theatreRoutes);
+
+        // Payment Link Generation Route
+        app.post('/generate-payment-link', (req, res) => {
+            const { selectedSeats } = req.body;
+
+            // Server-side validation of selected seats can be added here
+
+            const token = crypto.randomBytes(32).toString('hex');
+
+            // Here, you can store the token in your database with an expiration time
+            // Associate it with the user's session or selected seats
+
+            const paymentLink = `https://razorpay.me/@mymovieticketbookingapp?amount=zgioswZa9n4qt5x9yD7i%2BQ%3D%3D&token=${token}`;
+            res.json({ paymentLink });
+        });
 
         // Start the server
         app.listen(port, () => {

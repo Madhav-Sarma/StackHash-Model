@@ -1,34 +1,79 @@
+/* Seats.css */
 .seats-container {
-    text-align: center;
-    padding: 20px;
-  }
-  
-  .seats-grid {
-    display: inline-block;
-  }
-  
-  .seat-row {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 10px;
-  }
-  
-  .seat {
-    width: 30px;
-    height: 30px;
-    margin: 5px;
-    background-color: #ccc;
-    text-align: center;
-    line-height: 30px;
-    cursor: pointer;
-  }
-  
-  .seat.selected {
-    background-color: #4CAF50;
-    color: white;
-  }
-  
-  .btn-primary {
-    margin-top: 20px;
-  }
-  
+  text-align: center;
+  margin-top: 50px;
+}
+
+.seats-grid {
+  display: inline-block;
+  margin: 20px auto;
+}
+
+.seat-row {
+  display: flex;
+  justify-content: center;
+}
+
+.seat {
+  width: 50px;
+  height: 50px;
+  margin: 5px;
+  background-color: #f8f9fa;
+  border: 2px solid #6c757d;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 50px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.seat.selected {
+  background-color: #28a745;
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.seat:hover {
+  background-color: #ffc107;
+}
+
+.confirmation-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.popup-content h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #343a40;
+}
+
+.popup-content p {
+  margin-bottom: 15px;
+  color: #495057;
+}
+
+.popup-content ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.popup-content ul li {
+  margin-bottom: 5px;
+  color: #007bff;
+}
+
+.popup-content .btn {
+  width: 45%;
+  margin: 5px;
+}

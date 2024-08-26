@@ -5,6 +5,7 @@ function Seats() {
   const rows = 5;
   const columns = 8;
   const [selectedSeats, setSelectedSeats] = useState(new Set());
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const toggleSeatSelection = (row, column) => {
     const seatId = `${row}-${column}`;
@@ -17,6 +18,18 @@ function Seats() {
       }
       return newSelectedSeats;
     });
+  };
+
+  const confirmSelection = () => {
+    setShowConfirmation(true);
+  };
+
+  const handleYes = () => {
+    window.location.href = 'https://razorpay.me/@mymovieticketbookingapp?amount=zgioswZa9n4qt5x9yD7i%2BQ%3D%3D';
+  };
+
+  const handleNo = () => {
+    setShowConfirmation(false);
   };
 
   return (
@@ -39,10 +52,27 @@ function Seats() {
       </div>
       <button
         className="btn btn-primary mt-3"
-        onClick={() => console.log(Array.from(selectedSeats))}
+        onClick={confirmSelection}
       >
         Confirm Selection
       </button>
+
+      {showConfirmation && (
+        <div className="confirmation-popup">
+          <div className="popup-content">
+            <h2>Confirm Your Selection</h2>
+            <p>You have selected the following seats:</p>
+            <ul>
+              {Array.from(selectedSeats).map(seat => (
+                <li key={seat}>{seat}</li>
+              ))}
+            </ul>
+            <p>Do you want to proceed to payment?</p>
+            <button className="btn btn-success" onClick={handleYes}>Yes</button>
+            <button className="btn btn-danger" onClick={handleNo}>No</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
