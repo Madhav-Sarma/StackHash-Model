@@ -5,7 +5,9 @@ import './Home.css';
 
 function Home() {
   const [movies, setMovies] = useState([]);
+  const [upcomingMovies, setUpcomingMovies] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [loopedMovies, setLoopedMovies] = useState([]);
   const wiperTrackRef = useRef(null);
   const cardWidthRef = useRef(0);
 
@@ -14,7 +16,15 @@ function Home() {
     const fetchMovies = async () => {
       try {
         const res = await axios.get('http://localhost:5000/api/movies');
-        setMovies(res.data);
+        // Filter to only include released and upcoming movies
+        const releasedMovies = res.data.filter(movie => movie.released === '1');
+        const upcomingMovies = res.data.filter(movie => movie.released === '0');
+        setMovies(releasedMovies);
+        setUpcomingMovies(upcomingMovies);
+
+        // Duplicate movies for looped effect
+        const duplicatedMovies = [...releasedMovies, ...releasedMovies];
+        setLoopedMovies(duplicatedMovies);
       } catch (error) {
         console.error('Error fetching movies:', error);
       }
@@ -27,7 +37,7 @@ function Home() {
   useEffect(() => {
     const wiperTrack = wiperTrackRef.current;
 
-    if (movies.length > 0 && wiperTrack) {
+    if (loopedMovies.length > 0 && wiperTrack) {
       const wipes = Array.from(wiperTrack.children);
       if (wipes.length > 0) {
         const wipeWidth = wipes[0].getBoundingClientRect().width;
@@ -40,32 +50,36 @@ function Home() {
         wipeSlide(activeIndex);
       }
     }
-  }, [activeIndex, movies]);
+  }, [activeIndex, loopedMovies]);
 
   // Auto-slide every 15 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      setActiveIndex((prevIndex) =>
-        prevIndex < movies.length - 1 ? prevIndex + 1 : prevIndex
-      );
+      setActiveIndex((prevIndex) => {
+        // Move to the next slide
+        const nextIndex = prevIndex + 1;
+        // Loop back to start if at the end of the duplicated list
+        return nextIndex >= loopedMovies.length ? 0 : nextIndex;
+      });
     }, 15000);
 
     return () => clearInterval(interval);
-  }, [movies.length]);
+  }, [loopedMovies.length]);
 
   // Handle next button click
   const handleNextClick = () => {
-    if (activeIndex < movies.length - 1) {
-      setActiveIndex(activeIndex + 1);
-    }
+    setActiveIndex((prevIndex) => {
+      const nextIndex = prevIndex + 1;
+      return nextIndex >= loopedMovies.length ? 0 : nextIndex;
+    });
   };
 
   // Handle previous button click
   const handlePrevClick = () => {
-    const cardsVisible = Math.floor(wiperTrackRef.current.clientWidth / cardWidthRef.current);
-    if (activeIndex > 0 && activeIndex > (movies.length - cardsVisible - 1)) {
-      setActiveIndex(activeIndex - 1);
-    }
+    setActiveIndex((prevIndex) => {
+      const prevIndexAdjusted = prevIndex - 1;
+      return prevIndexAdjusted < 0 ? loopedMovies.length - 1 : prevIndexAdjusted;
+    });
   };
 
   return (
@@ -78,7 +92,7 @@ function Home() {
         )}
         <div className="wiper-wrapper">
           <ul className="wiper-track" ref={wiperTrackRef}>
-            {movies.map((movie, index) => (
+            {loopedMovies.map((movie, index) => (
               <Link to={`/movies/${movie.name}`} key={index} className="wiper-item-link">
                 <li className="wiper-item">
                   <img
@@ -94,11 +108,31 @@ function Home() {
             ))}
           </ul>
         </div>
-        {activeIndex < movies.length - 1 && (
+        {activeIndex < loopedMovies.length - 1 && (
           <button className="wiper-button wiper-button__right" onClick={handleNextClick}>
             <img src="https://www.iconpacks.net/icons/2/free-icon-arrow-right-3098.png" alt="right" />
           </button>
         )}
+      </div>
+
+      <div className="upcoming-movies">
+        <h2>Upcoming Movies</h2>
+        <div className="upcoming-movies-grid">
+          {upcomingMovies.map((movie, index) => (
+            <Link to={`/movies/${movie.name}`} key={index} className="upcoming-movie-card">
+              <img
+                src={movie.image}
+                alt={movie.name}
+                className="upcoming-movie-image"
+              />
+              <div className="movie-content">
+                <h5 className="upcoming-movie-title">{movie.name}</h5>
+                <p>{movie.releaseDate}</p>
+                <p>{movie.genre}</p>
+              </div>
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   );

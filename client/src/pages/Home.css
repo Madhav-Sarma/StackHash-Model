@@ -94,3 +94,64 @@ body {
   right: 10px;
   z-index: 10;
 }
+
+/* Upcoming Movies Section */
+.upcoming-movies {
+  margin-top: 40px;
+}
+
+.upcoming-movies h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* Added text shadow for better visibility */
+}
+
+.upcoming-movies-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  }
+
+.upcoming-movie-card {
+  flex: 1 1 calc(20% - 20px);
+  max-width: 200px;
+  border: 1px solid #333;
+  padding: 10px;
+  border-radius: 8px;
+  background: #1f1f1f;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  text-decoration: none; /* Ensure no underline */
+}
+
+.upcoming-movie-card:hover {
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+}
+
+.upcoming-movie-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.upcoming-movie-title {
+  font-size: 1rem;
+  margin-top: 10px;
+  color: #ffffff;
+}
+
+.upcoming-movie-content p {
+  font-size: 0.9rem;
+  color: #cccccc;
+  margin: 5px 0;
+}
+
+/* Link styling */
+.upcoming-movie-card {
+  color: #ffffff; /* Text color */
+}
+
+.upcoming-movie-card a {
+  text-decoration: none; /* Remove underline from links */
+}

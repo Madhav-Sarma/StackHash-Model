@@ -38,11 +38,14 @@ function MovieDetails() {
     <div className="container">
       <div className="row">
         <div className="col-md-6">
-          <img
-            src={movie.image}
+          <iframe
+            src={`https://www.youtube.com/embed/${movie.trailer}`}
             className="img-fluid"
-            alt={movie.name}
-            style={{ height: '500px', objectFit: 'cover' }}
+            style={{ height: '500px', objectFit: 'cover', width: '100%' }}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            title={movie.name}
           />
         </div>
         <div className="col-md-6">
@@ -52,9 +55,11 @@ function MovieDetails() {
           <p><strong>Description:</strong> {movie.description}</p>
           <p><strong>Director:</strong> {movie.director}</p>
           <p><strong>Rating:</strong> {movie.rating}/10</p>
-          <button className="btn btn-primary mt-3" onClick={handleBookNow}>
-            Book Now
-          </button>  {/* Book Now button */}
+          {movie.released === '1' && (  // Check if movie is released
+            <button className="btn btn-primary mt-3" onClick={handleBookNow}>
+              Book Now
+            </button>
+          )}
         </div>
       </div>
     </div>
@@ -62,3 +67,4 @@ function MovieDetails() {
 }
 
 export default MovieDetails;
+

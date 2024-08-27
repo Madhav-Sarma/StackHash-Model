@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Seats.css'; // Ensure you have this CSS file
+import './Seats.css';
 
 function Seats() {
   const rows = 5;
@@ -7,8 +7,20 @@ function Seats() {
   const [selectedSeats, setSelectedSeats] = useState(new Set());
   const [showConfirmation, setShowConfirmation] = useState(false);
 
+  const seatTypes = {
+    standard: 'standard-seat',
+    premium: 'premium-seat',
+    vip: 'vip-seat'
+  };
+
+  const getSeatType = (row) => {
+    if (row < 2) return seatTypes.vip;
+    if (row < 4) return seatTypes.premium;
+    return seatTypes.standard;
+  };
+
   const toggleSeatSelection = (row, column) => {
-    const seatId = `${row}-${column}`;
+    const seatId = `${String.fromCharCode(65 + row)}${column + 1}`;
     setSelectedSeats(prevState => {
       const newSelectedSeats = new Set(prevState);
       if (newSelectedSeats.has(seatId)) {
@@ -41,8 +53,9 @@ function Seats() {
             {[...Array(columns)].map((_, colIndex) => (
               <div
                 key={colIndex}
-                className={`seat ${selectedSeats.has(`${rowIndex}-${colIndex}`) ? 'selected' : ''}`}
+                className={`seat ${getSeatType(rowIndex)} ${selectedSeats.has(`${String.fromCharCode(65 + rowIndex)}${colIndex + 1}`) ? 'selected' : ''}`}
                 onClick={() => toggleSeatSelection(rowIndex, colIndex)}
+                title={`Row ${String.fromCharCode(65 + rowIndex)}, Seat ${colIndex + 1} (${getSeatType(rowIndex).replace('-seat', '')})`}
               >
                 {String.fromCharCode(65 + rowIndex)}{colIndex + 1}
               </div>
@@ -50,15 +63,13 @@ function Seats() {
           </div>
         ))}
       </div>
-      <button
-        className="btn btn-primary mt-3"
-        onClick={confirmSelection}
-      >
+      <button className="btn btn-primary mt-3" onClick={confirmSelection}>
         Confirm Selection
       </button>
 
       {showConfirmation && (
         <div className="confirmation-popup">
+          <div className="popup-overlay" onClick={handleNo}></div>
           <div className="popup-content">
             <h2>Confirm Your Selection</h2>
             <p>You have selected the following seats:</p>
