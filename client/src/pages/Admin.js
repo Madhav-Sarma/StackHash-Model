@@ -1,45 +1,22 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+// src/pages/Dashboard.js
+import React from 'react';
+import { Link } from 'react-router-dom';
+import './Admin.css'; // Import a CSS file for styling
 
-const Admin = () => {
-  const [movies, setMovies] = useState([]);
-
-  useEffect(() => {
-    axios
-      .get("/api/movies")
-      .then((response) => {
-        setMovies(response.data);
-      })
-      .catch((error) => {
-        console.error("There was an error fetching the movies!", error);
-      });
-  }, []);
-
-  const deleteMovie = (id) => {
-    axios
-      .delete(`/api/movies/${id}`)
-      .then(() => {
-        setMovies(movies.filter((movie) => movie._id !== id));
-      })
-      .catch((error) => {
-        console.error("There was an error deleting the movie!", error);
-      });
-  };
-
+function Admin() {
   return (
-    <div>
-      <h2>Admin Dashboard</h2>
-      <ul>
-        {movies.map((movie) => (
-          <li key={movie._id}>
-            {movie.title} - {movie.genre}
-            <button onClick={() => deleteMovie(movie._id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
+    <div className="dashboard">
+      <div className="dashboard-menu">
+        <Link to="/adminMovies" className="dashboard-item">Manage Movies</Link>
+        <Link to="/adminShowtimes" className="dashboard-item">Manage Showtimes</Link>
+        <Link to="/adminReservations" className="dashboard-item">Manage Reservations</Link>
+        <Link to="/adminUsers" className="dashboard-item">Manage Users</Link>
+        <Link to="/adminTheatres" className="dashboard-item">Manage Theatres</Link>
+      </div>
     </div>
   );
-};
+}
 
 export default Admin;
+
  

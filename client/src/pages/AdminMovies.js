@@ -1,42 +1,25 @@
+// src/pages/AdminMovies.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './Admin.css'; // Import the CSS file for styling
 
 function AdminMovies() {
   const [movies, setMovies] = useState([]);
   const [newMovie, setNewMovie] = useState({
-    title: '',
+    name: '',
     genre: '',
-    image: '',
-    language: '',
-    director: '',
-    trailer: '',
+    releaseDate: '',
     description: '',
-    duration: '',
-    startDate: '',
-    endDate: '',
+    director: '',
+    rating: '',
+    imageLink: ''
   });
 
   useEffect(() => {
-    // Fake API data
-    const fakeMovies = [
-      {
-        id: 1,
-        title: 'Inception',
-        genre: 'Sci-Fi',
-        image: 'https://m.media-amazon.com/images/I/51v5ZpFyaFL._AC_SY445_.jpg',
-        language: 'English',
-        director: 'Christopher Nolan',
-        trailer: 'https://www.youtube.com/watch?v=YoHD9XEInc0',
-        description: 'A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO.',
-        duration: '148 min',
-        startDate: '2024-08-01',
-        endDate: '2024-08-31',
-      },
-      // Add more movies here
-    ];
-
-    // Simulate API call
-    setMovies(fakeMovies);
+    // Fetch movies from the API
+    axios.get('/api/movies')
+      .then(response => setMovies(response.data))
+      .catch(error => console.error('Error fetching movies:', error));
   }, []);
 
   const handleChange = (e) => {
@@ -47,41 +30,47 @@ function AdminMovies() {
     }));
   };
 
-  const handleAddMovie = () => {
-    const updatedMovies = [...movies, { id: movies.length + 1, ...newMovie }];
-    setMovies(updatedMovies);
-    setNewMovie({
-      title: '',
-      genre: '',
-      image: '',
-      language: '',
-      director: '',
-      trailer: '',
-      description: '',
-      duration: '',
-      startDate: '',
-      endDate: '',
-    });
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Add or update movie via API
+    axios.post('/api/movies', newMovie)
+      .then(response => {
+        setMovies([...movies, response.data]);
+        setNewMovie({
+          name: '',
+          genre: '',
+          releaseDate: '',
+          description: '',
+          director: '',
+          rating: '',
+          imageLink: ''
+        });
+      })
+      .catch(error => console.error('Error adding/updating movie:', error));
   };
 
-  const handleDeleteMovie = (id) => {
-    const updatedMovies = movies.filter((movie) => movie.id !== id);
-    setMovies(updatedMovies);
+  const handleDelete = (id) => {
+    axios.delete(`/api/movies/${id}`)
+      .then(() => {
+        setMovies(movies.filter(m => m.id !== id));
+      })
+      .catch(error => console.error('Error deleting movie:', error));
   };
 
   return (
-    <div>
+    <div className="admin-container">
       <h2>Manage Movies</h2>
-      <div className="mb-4">
+      <div className="form-container">
         <h4>Add New Movie</h4>
         <div className="form-group">
           <input
             type="text"
             className="form-control"
-            name="title"
-            placeholder="Title"
-            value={newMovie.title}
+            name="name"
+            placeholder="Movie Name"
+            value={newMovie.name}
             onChange={handleChange}
+            required
           />
           <input
             type="text"
@@ -90,22 +79,23 @@ function AdminMovies() {
             placeholder="Genre"
             value={newMovie.genre}
             onChange={handleChange}
+            required
           />
           <input
-            type="text"
+            type="date"
             className="form-control mt-2"
-            name="image"
-            placeholder="Image URL"
-            value={newMovie.image}
+            name="releaseDate"
+            value={newMovie.releaseDate}
             onChange={handleChange}
+            required
           />
-          <input
-            type="text"
+          <textarea
+            name="description"
             className="form-control mt-2"
-            name="language"
-            placeholder="Language"
-            value={newMovie.language}
+            placeholder="Description"
+            value={newMovie.description}
             onChange={handleChange}
+            required
           />
           <input
             type="text"
@@ -114,48 +104,31 @@ function AdminMovies() {
             placeholder="Director"
             value={newMovie.director}
             onChange={handleChange}
+            required
+          />
+          <input
+            type="number"
+            className="form-control mt-2"
+            name="rating"
+            placeholder="Rating"
+            value={newMovie.rating}
+            onChange={handleChange}
+            step="0.1"
+            min="0"
+            max="10"
+            required
           />
           <input
             type="text"
             className="form-control mt-2"
-            name="trailer"
-            placeholder="Trailer URL"
-            value={newMovie.trailer}
+            name="imageLink"
+            placeholder="Image URL"
+            value={newMovie.imageLink}
             onChange={handleChange}
+            required
           />
-          <textarea
-            className="form-control mt-2"
-            name="description"
-            placeholder="Description"
-            value={newMovie.description}
-            onChange={handleChange}
-          ></textarea>
-          <input
-            type="text"
-            className="form-control mt-2"
-            name="duration"
-            placeholder="Duration"
-            value={newMovie.duration}
-            onChange={handleChange}
-          />
-          <input
-            type="date"
-            className="form-control mt-2"
-            name="startDate"
-            placeholder="Start Date"
-            value={newMovie.startDate}
-            onChange={handleChange}
-          />
-          <input
-            type="date"
-            className="form-control mt-2"
-            name="endDate"
-            placeholder="End Date"
-            value={newMovie.endDate}
-            onChange={handleChange}
-          />
-          <button className="btn btn-success mt-2" onClick={handleAddMovie}>
-            Add Movie
+          <button className="btn btn-success mt-2" onClick={handleSubmit}>
+            Add/Update Movie
           </button>
         </div>
       </div>
@@ -164,22 +137,30 @@ function AdminMovies() {
       <table className="table table-bordered">
         <thead>
           <tr>
-            <th>Title</th>
+            <th>Movie Name</th>
             <th>Genre</th>
-            <th>Language</th>
+            <th>Release Date</th>
+            <th>Description</th>
             <th>Director</th>
+            <th>Rating</th>
+            <th>Image</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {movies.map((movie) => (
             <tr key={movie.id}>
-              <td>{movie.title}</td>
+              <td>{movie.name}</td>
               <td>{movie.genre}</td>
-              <td>{movie.language}</td>
+              <td>{new Date(movie.releaseDate).toLocaleDateString()}</td>
+              <td>{movie.description}</td>
               <td>{movie.director}</td>
+              <td>{movie.rating}</td>
               <td>
-                <button className="btn btn-danger" onClick={() => handleDeleteMovie(movie.id)}>
+                <img src={movie.imageLink} alt={movie.name} className="movie-image" />
+              </td>
+              <td>
+                <button className="btn btn-danger" onClick={() => handleDelete(movie.id)}>
                   Delete
                 </button>
               </td>

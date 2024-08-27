@@ -12,7 +12,8 @@ function Movies() {
     const fetchMovies = async () => {
       try {
         const res = await axios.get('http://localhost:5000/api/movies'); // Fetch all movies
-        setMovies(res.data);
+        const filteredMovies = res.data.filter(movie => movie.released === '1'); // Filter released movies
+        setMovies(filteredMovies);
       } catch (error) {
         console.error('Error fetching movies:', error);
         setError('Unable to load movies from the API.');
@@ -27,7 +28,7 @@ function Movies() {
   }
 
   if (movies.length === 0) {
-    return <div>Loading...</div>; // Display loading state
+    return <div>Loading...</div>; // Display loading state if no movies are available
   }
 
   return (

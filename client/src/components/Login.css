@@ -1,0 +1,153 @@
+/* Wrapper for the whole component with a background image */
+.wrapper {
+  max-width: 400px;
+  width: 100%;
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
+  margin: auto;
+  position: relative;
+  overflow: hidden;
+  background-size: cover; /* Cover the entire container */
+  background-position: center; /* Center the image */
+}
+
+/* Title styling */
+.title-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+  color: #fff; /* Ensure text is white for better visibility */
+  transition: color 0.3s ease;
+}
+
+/* Form container */
+.form-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Slide controls */
+.slide-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.slide-controls input[type="radio"] {
+  display: none; /* Hide the radio buttons */
+}
+
+.slide {
+  width: 50%;
+  text-align: center;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 500;
+  padding: 10px 0;
+  transition: color 0.3s ease;
+  color: #333; /* Default color */
+}
+
+/* Set text color to white when selected */
+#login:checked ~ .slide-controls .login,
+#signup:checked ~ .slide-controls .signup {
+  color: #fff; /* Set to white when selected */
+}
+
+.slide-tab {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(135deg, #f05f57, #360940);
+  border-radius: 25px;
+  transition: 0.4s;
+}
+
+#login:checked ~ .slide-tab {
+  left: 0;
+}
+
+#signup:checked ~ .slide-tab {
+  left: 50%;
+}
+
+/* Form inner container styling */
+.form-inner {
+  display: flex;
+  width: 200%; /* Ensures enough width for both forms */
+  transition: margin-left 0.4s ease; /* Smooth transition */
+}
+
+/* Make sure each form takes up 50% of the width */
+.form-inner form {
+  width: 50%;
+}
+
+/* Input fields styling */
+.field {
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.field input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  outline: none;
+  transition: border-color 0.3s;
+  background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent for readability */
+}
+
+.field input:focus {
+  border-color: #360940;
+}
+
+/* Link styles */
+.pass-link,
+.signup-link {
+  text-align: center;
+  margin: 10px 0;
+}
+
+.pass-link a,
+.signup-link a {
+  color: #360940;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s;
+}
+
+.pass-link a:hover,
+.signup-link a:hover {
+  color: #f05f57;
+}
+
+/* Submit button styling */
+.field input[type="submit"] {
+  background: linear-gradient(135deg, #f05f57, #360940);
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s;
+  border-radius: 5px;
+}
+
+.field input[type="submit"]:hover {
+  background: linear-gradient(135deg, #360940, #f05f57);
+}
+  

@@ -1,8 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
-import { FaFilm, FaTheaterMasks, FaClock, FaTicketAlt, FaUser } from 'react-icons/fa';
-import logo from './images/logo.png'; // Import the logo image
+import logo from './images/logo.png'; 
 
 function Navbar() {
   return (
@@ -17,28 +16,8 @@ function Navbar() {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
             <li className="nav-item">
-              <Link className="nav-link" to="/movies">
-                <FaFilm className="icon" /> Movies
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/theatres">
-                <FaTheaterMasks className="icon" /> Theatres
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/showtimes">
-                <FaClock className="icon" /> Showtimes
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/reservations">
-                <FaTicketAlt className="icon" /> Reservations
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/users">
-                <FaUser className="icon" /> Users
+              <Link className="nav-link" to="/login">
+                <b>Login/Register</b>
               </Link>
             </li>
           </ul>
