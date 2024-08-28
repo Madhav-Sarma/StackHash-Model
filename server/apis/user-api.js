@@ -87,8 +87,11 @@ router.post('/register', async (req, res) => {
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        // Set role as 'user' by default
+        const role = 'user';
+
         // Create new user
-        const newUser = { username, email, password: hashedPassword };
+        const newUser = { username, email, password: hashedPassword, role };  // Include role attribute
         const result = await addUser(req.db, newUser);
 
         res.status(201).json({ message: 'User registered successfully', userId: result.insertedId });
@@ -97,6 +100,8 @@ router.post('/register', async (req, res) => {
     }
 });
 
+
+// User Login Route
 // User Login Route
 router.post('/login', async (req, res) => {
     try {
@@ -113,17 +118,22 @@ router.post('/login', async (req, res) => {
         if (!isMatch) {
             return res.status(400).json({ error: 'Invalid credentials' });
         }
-        else{
+
+        // Check role of the user
+        const role = user.role;
+        if (role !== 'admin' && role !== 'user') {
+            return res.status(400).json({ error: 'Invalid user role' });
+        }
 
         // Generate JWT token
-        const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ userId: user._id, role: user.role }, JWT_SECRET, { expiresIn: '1h' });
 
-        // Return token and user information
-        res.json({ message: 'Login successful', token });
-        }
+        // Return token and user information including role
+        res.json({ message: 'Login successful', token, role });
     } catch (err) {
         res.status(500).json({ error: 'Failed to login' });
     }
 });
+
 
 module.exports = router;

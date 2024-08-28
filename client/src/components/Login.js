@@ -25,11 +25,14 @@ let navigate=useNavigate();
     // Handle login logic here, e.g., call an API using axios
     axios.post('http://localhost:5000/api/users/login',{username,password})
     .then(res=>{console.log(res)
-      if (res.data.message=='Login successful'){
+      if (res.data.message === 'Login successful' && res.data.role === 'user'){
       navigate('/')
       }
+      else if(res.data.message === 'Login successful' && res.data.role === 'admin'){
+        navigate('/admin')
+      }
       else{
-        console.log('notuser')
+        console.log('no user found')
       }
     })
     .catch(err=>console.log(err))
