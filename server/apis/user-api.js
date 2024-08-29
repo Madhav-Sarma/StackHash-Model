@@ -70,11 +70,27 @@ router.delete('/:id', async (req, res) => {
 // User Registration Route
 router.post('/register', async (req, res) => {
     try {
-        const { username, email, password } = req.body;  // Add email to destructuring
+        const { username, email, password } = req.body;
+
+        // Validate input
+        if (!username || !email || !password) {
+            return res.status(400).json({ error: 'All fields are required' });
+        }
+
+        // Optional: Additional email format validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ error: 'Invalid email format' });
+        }
+
+        // Optional: Password strength validation (e.g., minimum length)
+        if (password.length < 6) {
+            return res.status(400).json({ error: 'Password must be at least 6 characters long' });
+        }
 
         // Check if user already exists by username or email
         const existingUser = await getUserByUsername(req.db, username);
-        const existingEmail = await req.db.collection('users').findOne({ email: email }); // Check if email already exists
+        const existingEmail = await req.db.collection('users').findOne({ email });
 
         if (existingUser) {
             return res.status(400).json({ error: 'Username already exists' });
@@ -91,17 +107,28 @@ router.post('/register', async (req, res) => {
         const role = 'user';
 
         // Create new user
-        const newUser = { username, email, password: hashedPassword, role };  // Include role attribute
+        const newUser = { username, email, password: hashedPassword, role };
+
+        // Insert new user into the database
         const result = await addUser(req.db, newUser);
 
+        // Check if insertion was successful
+        if (!result.insertedId) {
+            return res.status(500).json({ error: 'Failed to register user' });
+        }
+
+        // Successfully registered
         res.status(201).json({ message: 'User registered successfully', userId: result.insertedId });
     } catch (err) {
-        res.status(500).json({ error: 'Failed to register user' });
+        console.error("Registration Error:", err);  // Log the exact error for debugging
+        res.status(500).json({ error: 'An unexpected error occurred during registration' });
     }
 });
 
 
-// User Login Route
+
+
+
 // User Login Route
 router.post('/login', async (req, res) => {
     try {
@@ -110,30 +137,33 @@ router.post('/login', async (req, res) => {
         // Find user by username
         const user = await getUserByUsername(req.db, username);
         if (!user) {
-            return res.status(400).json({ error: 'User not found' });
+            return res.status(400).json({ error: 'Invalid username or password' });
         }
 
-        // Verify password
-        const isMatch = await bcrypt.compare(password, user.password);
+        // Correct: Compare plain password with hashed password from DB
+        const isMatch = await bcrypt.compare(password, user.password);  // No rehashing here
         if (!isMatch) {
-            return res.status(400).json({ error: 'Invalid credentials' });
-        }
-
-        // Check role of the user
-        const role = user.role;
-        if (role !== 'admin' && role !== 'user') {
-            return res.status(400).json({ error: 'Invalid user role' });
+            return res.status(400).json({ error: 'Invalid username or password' });
         }
 
         // Generate JWT token
-        const token = jwt.sign({ userId: user._id, role: user.role }, JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign(
+            { userId: user._id, role: user.role },  // Include user role in token payload
+            JWT_SECRET,
+            { expiresIn: '1h' }
+        );
 
         // Return token and user information including role
-        res.json({ message: 'Login successful', token, role });
+        res.json({ message: 'Login successful', token, role: user.role });
     } catch (err) {
+        console.error(err);
         res.status(500).json({ error: 'Failed to login' });
     }
 });
+
+
+
+
 
 
 module.exports = router;

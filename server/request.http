@@ -2,7 +2,7 @@
 POST http://localhost:5000/api/users/register
 
 {
-    "name":"hero",
-    "email":"hero@gmail.com",
-    "password":"hero"
+    "name":"you4",
+    "email":"you4@gmail.com",
+    "password":"you4"
 }

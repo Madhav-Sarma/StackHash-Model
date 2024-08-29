@@ -18,43 +18,50 @@ let navigate=useNavigate();
   };
 
   // Handle form submissions
-  const onLoginSubmit = (data) => {
+  const onLoginSubmit = async (data) => {
     console.log("Login Data: ", data);
-    let username=data.username
-    let password=data.password
-    // Handle login logic here, e.g., call an API using axios
-    axios.post('http://localhost:5000/api/users/login',{username,password})
-    .then(res=>{console.log(res)
-      if (res.data.message === 'Login successful' && res.data.role === 'user'){
-      navigate('/')
+    const { username, password } = data;
+  
+    try {
+      const res = await axios.post('http://localhost:5000/api/users/login', { username, password });
+      console.log(res);
+  
+      if (res.data.message === 'Login successful') {
+        if (res.data.role === 'user') {
+          navigate('/');  // Navigate to user home
+        } else if (res.data.role === 'admin') {
+          navigate('/admin');  // Navigate to admin home
+        }
+      } else {
+        console.log('No user found or login failed');
       }
-      else if(res.data.message === 'Login successful' && res.data.role === 'admin'){
-        navigate('/admin')
-      }
-      else{
-        console.log('no user found')
-      }
-    })
-    .catch(err=>console.log(err))
+    } catch (err) {
+      console.error('Login Error: ', err.response?.data?.error || err.message);  // Improved error handling
+      alert(err.response?.data?.error || 'An error occurred during login.');  // Display error to the user
+    }
   };
+  
 
-  async function onSignupSubmit(data) {
+  const onSignupSubmit = async (data) => {
     console.log("Signup Data: ", data);
-    // Handle signup logic here, e.g., call an API using axios
-    let username=data.username
-    let password=data.password
-    let email=data.email
-    axios.post('http://localhost:5000/api/users/register',{username,email,password})
-    .then(result=> {console.log(result)
-      if(result.data.message==="User registered successfully"){
-      navigate('/login') //while splitting sign up and sign in pages see that both have different url paths and imporve it
-      }else{
-        console.log(result.error)
+    const { username, email, password } = data;
+  
+    try {
+      const result = await axios.post('http://localhost:5000/api/users/register', { username, email, password });
+      console.log(result);
+  
+      if (result.data.message === "User registered successfully") {
+        navigate('/login');  // Redirect to login after successful signup
+      } else {
+        console.error('Signup Error: ', result.data.error);  // Improved error handling
+        alert(result.data.error || 'An error occurred during registration.');  // Display error to the user
       }
-    })
-    .catch(err=> console.log(err))
+    } catch (err) {
+      console.error('Signup Error: ', err.response?.data?.error || err.message);  // Improved error handling
+      alert(err.response?.data?.error || 'An error occurred during registration.');  // Display error to the user
+    }
   };
-
+  
   return (
     <div className="wrapper">
       <div className="title-text">
