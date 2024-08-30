@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import "./Login.css"; // Ensure this path is correct according to your project structure
+import "./Login.css"; 
 import axios from 'axios';
-import {useNavigate} from 'react-router-dom'
-const Login = () => {
-let navigate=useNavigate();
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux'; 
+import { loginUser, loginFail } from './redux/actions/userActions'; // Import actions
 
+const Login = () => {
+  let navigate = useNavigate();
+  const dispatch = useDispatch(); 
 
   const [isLoginActive, setIsLoginActive] = useState(true);
 
-  // useForm hooks for Login and Signup forms
   const { register: registerLogin, handleSubmit: handleLoginSubmit, formState: { errors: loginErrors } } = useForm();
   const { register: registerSignup, handleSubmit: handleSignupSubmit, formState: { errors: signupErrors } } = useForm();
 
@@ -17,16 +19,19 @@ let navigate=useNavigate();
     setIsLoginActive(!isLoginActive);
   };
 
-  // Handle form submissions
   const onLoginSubmit = async (data) => {
     console.log("Login Data: ", data);
     const { username, password } = data;
-  
+
     try {
       const res = await axios.post('http://localhost:5000/api/users/login', { username, password });
       console.log(res);
-  
+
       if (res.data.message === 'Login successful') {
+        // Dispatch login action to update Redux state
+        dispatch(loginUser(res.data.user)); // Ensure `res.data.user` contains the correct user data
+
+        // Navigate based on user role
         if (res.data.role === 'user') {
           navigate('/');  // Navigate to user home
         } else if (res.data.role === 'admin') {
@@ -34,31 +39,33 @@ let navigate=useNavigate();
         }
       } else {
         console.log('No user found or login failed');
+        dispatch(loginFail('No user found or login failed')); // Dispatch login fail if the response indicates failure
       }
     } catch (err) {
-      console.error('Login Error: ', err.response?.data?.error || err.message);  // Improved error handling
-      alert(err.response?.data?.error || 'An error occurred during login.');  // Display error to the user
+      console.error('Login Error: ', err.response?.data?.error || err.message);
+      dispatch(loginFail(err.response?.data?.error || err.message)); // Dispatch login fail with error message
+      alert(err.response?.data?.error || 'An error occurred during login.');
     }
   };
-  
+
 
   const onSignupSubmit = async (data) => {
     console.log("Signup Data: ", data);
     const { username, email, password } = data;
-  
+
     try {
       const result = await axios.post('http://localhost:5000/api/users/register', { username, email, password });
       console.log(result);
-  
+
       if (result.data.message === "User registered successfully") {
         navigate('/login');  // Redirect to login after successful signup
       } else {
-        console.error('Signup Error: ', result.data.error);  // Improved error handling
-        alert(result.data.error || 'An error occurred during registration.');  // Display error to the user
+        console.error('Signup Error: ', result.data.error);
+        alert(result.data.error || 'An error occurred during registration.');
       }
     } catch (err) {
-      console.error('Signup Error: ', err.response?.data?.error || err.message);  // Improved error handling
-      alert(err.response?.data?.error || 'An error occurred during registration.');  // Display error to the user
+      console.error('Signup Error: ', err.response?.data?.error || err.message);
+      alert(err.response?.data?.error || 'An error occurred during registration.');
     }
   };
   

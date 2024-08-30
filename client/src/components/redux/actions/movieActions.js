@@ -29,6 +29,7 @@ export const fetchMoviesFailure = (error) => {
 // Thunk to fetch movies
 export const fetchMovies = () => {
     return (dispatch) => {
+        
         dispatch(fetchMoviesRequest());
         axios.get('http://localhost:3001/movies')
             .then(response => {
