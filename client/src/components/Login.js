@@ -11,6 +11,7 @@ const Login = () => {
   const dispatch = useDispatch(); 
 
   const [isLoginActive, setIsLoginActive] = useState(true);
+  const [signupSuccessMessage, setSignupSuccessMessage] = useState(''); // New state for signup success message
 
   const { register: registerLogin, handleSubmit: handleLoginSubmit, formState: { errors: loginErrors } } = useForm();
   const { register: registerSignup, handleSubmit: handleSignupSubmit, formState: { errors: signupErrors } } = useForm();
@@ -29,7 +30,7 @@ const Login = () => {
 
       if (res.data.message === 'Login successful') {
         // Dispatch login action to update Redux state
-        dispatch(loginUser(res.data.user)); // Ensure `res.data.user` contains the correct user data
+        dispatch(loginUser(res.data.user)); // Ensure res.data.user contains the correct user data
 
         // Navigate based on user role
         if (res.data.role === 'user') {
@@ -48,7 +49,6 @@ const Login = () => {
     }
   };
 
-
   const onSignupSubmit = async (data) => {
     console.log("Signup Data: ", data);
     const { username, email, password } = data;
@@ -58,7 +58,7 @@ const Login = () => {
       console.log(result);
 
       if (result.data.message === "User registered successfully") {
-        navigate('/login');  // Redirect to login after successful signup
+        setSignupSuccessMessage("Account created successfully!"); // Display success message
       } else {
         console.error('Signup Error: ', result.data.error);
         alert(result.data.error || 'An error occurred during registration.');
@@ -70,9 +70,10 @@ const Login = () => {
   };
   
   return (
+    
     <div className="wrapper">
       <div className="title-text">
-        <div className={`title ${isLoginActive ? "login" : "signup"}`}>
+        <div>
           {isLoginActive ? "Login Form" : "Signup Form"}
         </div>
       </div>
@@ -170,6 +171,7 @@ const Login = () => {
             <div className="field">
               <input type="submit" value="Signup" />
             </div>
+            {signupSuccessMessage && <p className="success">{signupSuccessMessage}</p>} {/* Display success message */}
           </form>
         </div>
       </div>
