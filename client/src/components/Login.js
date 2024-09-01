@@ -25,7 +25,7 @@ const Login = () => {
     const { username, password } = data;
 
     try {
-      const res = await axios.post('http://localhost:5000/api/users/login', { username, password });
+      const res = await axios.post('https://cinespher.onrender.com/api/users/login', { username, password });
       console.log(res);
 
       if (res.data.message === 'Login successful') {
@@ -52,7 +52,7 @@ const Login = () => {
     const { username, email, password } = data;
   
     try {
-      const result = await axios.post('http://localhost:5000/api/users/register', { username, email, password });
+      const result = await axios.post('https://cinespher.onrender.com/api/users/register', { username, email, password });
       console.log(result);
   
       if (result.data.message === "User registered successfully") {

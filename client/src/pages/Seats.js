@@ -16,7 +16,7 @@ function Seats() {
   useEffect(() => {
     const fetchTheatreData = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/theatres');
+        const res = await axios.get('https://cinespher.onrender.com/api/theatres');
         const allTheatres = res.data;
 
         // Find the theatre and showtime that matches the showId

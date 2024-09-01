@@ -23,7 +23,7 @@ function AdminUsers() {
 
     if (storedToken) {
       axios
-        .get('http://localhost:5000/api/users', {
+        .get('https://cinespher.onrender.com/api/users', {
           headers: { Authorization: `Bearer ${storedToken}` },
         })
         .then((response) => setUsers(response.data))
@@ -51,7 +51,7 @@ function AdminUsers() {
     // Add or update user via API
     axios
       .post(
-        'http://localhost:5000/api/users',
+        'https://cinespher.onrender.com/api/users',
         newUser,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -71,7 +71,7 @@ function AdminUsers() {
 
   const handleDelete = (id) => {
     axios
-      .delete(`http://localhost:5000/api/users/${id}`, {
+      .delete(`https://cinespher.onrender.com/api/users/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then(() => {

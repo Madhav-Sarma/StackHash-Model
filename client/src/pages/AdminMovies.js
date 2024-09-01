@@ -17,7 +17,7 @@ function AdminMovies() {
 
   useEffect(() => {
     // Fetch movies from the API
-    axios.get('http://localhost:5000/api/movies')
+    axios.get('https://cinespher.onrender.com/api/movies')
       .then(response => setMovies(response.data))
       .catch(error => console.error('Error fetching movies:', error));
   }, []);
@@ -33,7 +33,7 @@ function AdminMovies() {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Add or update movie via API
-    axios.post('http://localhost:5000/api/movies', newMovie)
+    axios.post('https://cinespher.onrender.com/api/movies', newMovie)
       .then(response => {
         setMovies([...movies, response.data]);
         setNewMovie({
@@ -50,7 +50,7 @@ function AdminMovies() {
   };
 
   const handleDelete = (id) => {
-    axios.delete(`http://localhost:5000/api/movies/${id}`)
+    axios.delete(`https://cinespher.onrender.com/api/movies/${id}`)
       .then(() => {
         setMovies(movies.filter(m => m.id !== id));
       })

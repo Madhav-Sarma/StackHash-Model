@@ -11,7 +11,7 @@ function Movies() {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/movies'); // Fetch all movies
+        const res = await axios.get('https://cinespher.onrender.com/api/movies'); // Fetch all movies
         const filteredMovies = res.data.filter(movie => movie.released === '1'); // Filter released movies
         setMovies(filteredMovies);
       } catch (error) {
