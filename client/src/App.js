@@ -16,6 +16,7 @@ import Reservations from "./pages/Reservations";
 import Users from "./pages/Users";
 import Admin from "./pages/Admin";
 import Login from "./components/Login";
+import Payment from "./pages/Payment";
 import './App.css'; // Import App CSS
 
 
@@ -35,6 +36,7 @@ function App() {
           <Route path="/theatres" element={<Theatres />} />
           <Route path="/showtimes/:movieId" element={<Showtimes />} />
           <Route path="/seats/:showId" element={<Seats />} /> {/* Add Seats Route */}
+          <Route path="/Payments" element={<Payment/> }/>
           <Route path="/reservations" element={<Reservations />} />
           <Route path="/users" element={<Users />} />
           <Route path="/admin" element={<Admin />} />
