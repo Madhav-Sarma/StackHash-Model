@@ -1,21 +1,28 @@
-import { applyMiddleware, combineReducers } from 'redux';
+import { applyMiddleware, combineReducers, compose } from 'redux';
 import { legacy_createStore as createStore } from 'redux';
-import {thunk} from 'redux-thunk'; // Corrected import
+import {thunk} from 'redux-thunk';
 
 // Import other reducers
-import movieReducer from './reducers/movieReducer'; // Example reducer, adjust based on your setup
-import userReducer from './reducers/userReducer';   // Import userReducer to manage user state
+import movieReducer from './reducers/movieReducer';
+import userReducer from './reducers/userReducer';
 
 // Combine all reducers into the root reducer
 const rootReducer = combineReducers({
   movies: movieReducer,
-  user: userReducer, // Add the user reducer to handle authentication state
+  user: userReducer,
 });
 
-// Create the store with the middleware
-const store = createStore(
-  rootReducer,
-  applyMiddleware(thunk)
-);
+// Setup Redux DevTools with a configuration option
+const composeEnhancers =
+  (process.env.NODE_ENV !== 'production' &&
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ &&
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+      trace: true,
+      traceLimit: 25,
+    })) ||
+  compose;
+
+// Create the store with middleware
+const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
 
 export default store;

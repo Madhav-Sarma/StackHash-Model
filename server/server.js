@@ -4,11 +4,20 @@ const express = require('express');
 const { MongoClient } = require('mongodb');
 require('dotenv').config();
 const cors = require('cors');
-const crypto = require('crypto'); // Add this line
+const crypto = require('crypto');
 
 const app = express();
 const port = process.env.PORT || 5000;
-app.use(cors());
+
+// CORS configuration to allow requests from specific origins
+const corsOptions = {
+    origin: 'http://localhost:3000', // Allow only this origin (your frontend URL)
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow these HTTP methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Allow these headers
+};
+
+// Apply CORS middleware with the specified options
+app.use(cors(corsOptions));
 app.use(express.json()); // To parse JSON bodies
 
 // MongoDB connection setup
@@ -62,4 +71,3 @@ MongoClient.connect(url, { useUnifiedTopology: true })
         });
     })
     .catch(error => console.error('Failed to connect to MongoDB Atlas:', error));
-    
