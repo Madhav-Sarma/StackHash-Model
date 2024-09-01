@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Seats.css';
 
 function Seats() {
@@ -6,6 +7,7 @@ function Seats() {
   const columns = 8;
   const [selectedSeats, setSelectedSeats] = useState(new Set());
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const navigate = useNavigate();
 
   const seatTypes = {
     standard: 'standard-seat',
@@ -37,7 +39,7 @@ function Seats() {
   };
 
   const handleYes = () => {
-    window.location.href = 'https://razorpay.me/@cineSphere?amount=zgioswZa9n4qt5x9yD7i%2BQ%3D%3D';
+    navigate('/payments', { state: { seats: Array.from(selectedSeats) } });
   };
 
   const handleNo = () => {
