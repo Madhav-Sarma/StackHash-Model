@@ -32,12 +32,14 @@ MongoClient.connect(url, { useUnifiedTopology: true })
         const showRoutes = require('./apis/show-api');
         const userRoutes = require('./apis/user-api');
         const theatreRoutes = require('./apis/theatre-api');
+        const bookingApi = require('./apis/booking-api');
 
         // Use API routes
         app.use('/api/movies', movieRoutes);
         app.use('/api/shows', showRoutes);
         app.use('/api/users', userRoutes);
         app.use('/api/theatres', theatreRoutes);
+        app.use('/api/booking', bookingApi);
 
         // Payment Link Generation Route
         app.post('/generate-payment-link', (req, res) => {
