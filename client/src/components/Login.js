@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import "./Login.css"; 
+import "./Login.css";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux'; 
-import { loginUser, loginFail } from './redux/actions/userActions'; // Import actions
+import { loginUser, loginFail } from './redux/actions/userActions';
 
 const Login = () => {
   let navigate = useNavigate();
   const dispatch = useDispatch(); 
 
   const [isLoginActive, setIsLoginActive] = useState(true);
-  const [signupSuccessMessage, setSignupSuccessMessage] = useState(''); // New state for signup success message
+  const [signupSuccessMessage, setSignupSuccessMessage] = useState('');
 
   const { register: registerLogin, handleSubmit: handleLoginSubmit, formState: { errors: loginErrors } } = useForm();
   const { register: registerSignup, handleSubmit: handleSignupSubmit, formState: { errors: signupErrors } } = useForm();
@@ -29,36 +29,40 @@ const Login = () => {
       console.log(res);
 
       if (res.data.message === 'Login successful') {
-        // Dispatch login action to update Redux state
-        dispatch(loginUser(res.data.user)); // Ensure res.data.user contains the correct user data
+        dispatch(loginUser(res.data.user));
 
-        // Navigate based on user role
         if (res.data.role === 'user') {
-          navigate('/');  // Navigate to user home
+          navigate('/');  
         } else if (res.data.role === 'admin') {
-          navigate('/admin');  // Navigate to admin home
+          navigate('/admin');  
         }
       } else {
         console.log('No user found or login failed');
-        dispatch(loginFail('No user found or login failed')); // Dispatch login fail if the response indicates failure
+        dispatch(loginFail('No user found or login failed'));
       }
     } catch (err) {
       console.error('Login Error: ', err.response?.data?.error || err.message);
-      dispatch(loginFail(err.response?.data?.error || err.message)); // Dispatch login fail with error message
+      dispatch(loginFail(err.response?.data?.error || err.message));
       alert(err.response?.data?.error || 'An error occurred during login.');
     }
   };
 
-  const onSignupSubmit = async (data) => {
+  const onSignupSubmit = async (data, e) => {  // e is the event object
     console.log("Signup Data: ", data);
     const { username, email, password } = data;
-
+  
     try {
       const result = await axios.post('http://localhost:5000/api/users/register', { username, email, password });
       console.log(result);
-
+  
       if (result.data.message === "User registered successfully") {
-        setSignupSuccessMessage("Account created successfully!"); // Display success message
+        setSignupSuccessMessage("Account created successfully!");
+  
+        // Clear the form fields
+        e.target.reset();  // Clear form fields after submission
+  
+        // Slide back to the login form using the same effect as clicking the Login label
+        setIsLoginActive(true);  // Set the active state to login
       } else {
         console.error('Signup Error: ', result.data.error);
         alert(result.data.error || 'An error occurred during registration.');
@@ -70,13 +74,18 @@ const Login = () => {
   };
   
   return (
-    
     <div className="wrapper">
-      <div className="title-text">
-        <div>
-          {isLoginActive ? "Login Form" : "Signup Form"}
+      {/* Success Message */}
+      {signupSuccessMessage && (
+        <div className="signup-success-message">
+          {signupSuccessMessage}
         </div>
+      )}
+
+      <div className="title-text">
+        <div>{isLoginActive ? "Login Form" : "Signup Form"}</div>
       </div>
+      
       <div className="form-container">
         <div className="slide-controls">
           <input
@@ -171,7 +180,6 @@ const Login = () => {
             <div className="field">
               <input type="submit" value="Signup" />
             </div>
-            {signupSuccessMessage && <p className="success">{signupSuccessMessage}</p>} {/* Display success message */}
           </form>
         </div>
       </div>

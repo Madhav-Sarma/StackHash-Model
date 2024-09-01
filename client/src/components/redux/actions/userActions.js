@@ -6,10 +6,13 @@ export const LOGIN_FAIL = 'LOGIN_FAIL';
 export const LOGOUT = 'LOGOUT';
 
 // Action creator for login success
-export const loginUser = (user) => {
+export const loginUser = (userData) => {
+  // Save token to local storage
+  localStorage.setItem('token', userData.token);
+
   return {
     type: LOGIN_SUCCESS,
-    payload: user, // This payload will be the user data from the API response
+    payload: userData, // Payload contains user data and token
   };
 };
 
@@ -23,6 +26,9 @@ export const loginFail = (error) => {
 
 // Action creator for logout
 export const logoutUser = () => {
+  // Remove token from local storage on logout
+  localStorage.removeItem('token');
+
   return {
     type: LOGOUT,
   };

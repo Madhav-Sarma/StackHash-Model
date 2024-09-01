@@ -4,6 +4,7 @@ import { LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT } from '../actions/userActions';
 
 const initialState = {
   user: null,
+  token: localStorage.getItem('token'), // Initialize token from local storage
   loading: false,
   error: null,
 };
@@ -13,7 +14,8 @@ const userReducer = (state = initialState, action) => {
     case LOGIN_SUCCESS:
       return {
         ...state,
-        user: action.payload, // Updates the user in the state with the payload from action
+        user: action.payload.user, // Stores user data
+        token: action.payload.token, // Stores the token
         error: null,
       };
     case LOGIN_FAIL:
@@ -25,6 +27,7 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         user: null,
+        token: null,
       };
     default:
       return state;

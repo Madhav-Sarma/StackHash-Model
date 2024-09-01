@@ -7,9 +7,11 @@ import logo from './images/logo.png';
 
 function Navbar() {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.payload);
-  console.log('User from Redux:', user);
- // Access the user from Redux store
+  
+  // Correctly access the user from the Redux store
+  const user = useSelector((state) => state.user.user); // Use the correct path
+
+  console.log('User from Redux:', user); // Check if user data is logged correctly
 
   const handleLogout = () => {
     dispatch(logoutUser());
@@ -35,7 +37,7 @@ function Navbar() {
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
-            {user ? (
+            {user ? ( // Check if user exists
               <li className="nav-item dropdown">
                 <a
                   className="nav-link dropdown-toggle"
@@ -45,7 +47,7 @@ function Navbar() {
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  Welcome, {user.username}
+                  Welcome, {user.username} {/* Display username */}
                 </a>
                 <ul className="dropdown-menu" aria-labelledby="userDropdown">
                   <li>
