@@ -10,7 +10,6 @@ import AdminUsers from "./pages/AdminUsers";
 import AdminTheatres from "./pages/AdminTheatres";
 import MovieDetails from "./pages/MovieDetails";
 import Theatres from "./pages/Theatres";
-import Showtimes from "./pages/Showtimes";
 import Seats from "./pages/Seats";  // Import the Seats component
 import Reservations from "./pages/Reservations";
 import Users from "./pages/Users";
@@ -34,7 +33,6 @@ function App() {
           <Route path="/adminTheatres" element={<AdminTheatres   />} />
           <Route path="/movies/:name" element={<MovieDetails />} />
           <Route path="/theatres" element={<Theatres />} />
-          <Route path="/showtimes/:movieId" element={<Showtimes />} />
           <Route path="/seats/:showId" element={<Seats />} /> {/* Add Seats Route */}
           <Route path="/Payments" element={<Payment/> }/>
           <Route path="/reservations" element={<Reservations />} />
