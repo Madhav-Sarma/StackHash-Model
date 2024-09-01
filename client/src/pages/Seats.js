@@ -1,13 +1,50 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useParams, useNavigate } from 'react-router-dom';
 import './Seats.css';
 
 function Seats() {
-  const rows = 5;
-  const columns = 8;
+  const { showId } = useParams(); // Get showId from the URL parameters
+  const navigate = useNavigate();
+
+  const [theatre, setTheatre] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [selectedSeats, setSelectedSeats] = useState(new Set());
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchTheatreData = async () => {
+      try {
+        const res = await axios.get('http://localhost:5000/api/theatres');
+        const allTheatres = res.data;
+
+        // Find the theatre and showtime that matches the showId
+        const foundTheatre = allTheatres.find(theatre =>
+          theatre.showtimes.some(show => show._id === showId)
+        );
+
+        if (foundTheatre) {
+          setTheatre(foundTheatre);
+        } else {
+          setError('Showtime not found.');
+        }
+        
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching theatre data:', error);
+        setError('Unable to load theatre data from the API.');
+        setLoading(false);
+      }
+    };
+
+    fetchTheatreData();
+  }, [showId]);
+
+  if (loading) return <div>Loading seats...</div>;
+  if (error) return <div className="alert alert-danger">{error}</div>;
+
+  const rows = theatre.rows; // Array of number of columns per row
 
   const seatTypes = {
     standard: 'standard-seat',
@@ -16,13 +53,14 @@ function Seats() {
   };
 
   const getSeatType = (row) => {
-    if (row < 2) return seatTypes.vip;
-    if (row < 4) return seatTypes.premium;
+    const rowIndex = rows.indexOf(row);
+    if (rowIndex < Math.floor(rows.length * 0.2)) return seatTypes.vip;
+    if (rowIndex < Math.floor(rows.length * 0.6)) return seatTypes.premium;
     return seatTypes.standard;
   };
 
-  const toggleSeatSelection = (row, column) => {
-    const seatId = `${String.fromCharCode(65 + row)}${column + 1}`;
+  const toggleSeatSelection = (rowIndex, columnIndex) => {
+    const seatId = `${String.fromCharCode(65 + rowIndex)}${columnIndex + 1}`;
     setSelectedSeats(prevState => {
       const newSelectedSeats = new Set(prevState);
       if (newSelectedSeats.has(seatId)) {
@@ -50,14 +88,14 @@ function Seats() {
     <div className="seats-container">
       <h1>Select Your Seats</h1>
       <div className="seats-grid">
-        {[...Array(rows)].map((_, rowIndex) => (
+        {rows.map((numColumns, rowIndex) => (
           <div className="seat-row" key={rowIndex}>
-            {[...Array(columns)].map((_, colIndex) => (
+            {[...Array(numColumns)].map((_, colIndex) => (
               <div
                 key={colIndex}
-                className={`seat ${getSeatType(rowIndex)} ${selectedSeats.has(`${String.fromCharCode(65 + rowIndex)}${colIndex + 1}`) ? 'selected' : ''}`}
+                className={`seat ${getSeatType(rows[rowIndex])} ${selectedSeats.has(`${String.fromCharCode(65 + rowIndex)}${colIndex + 1}`) ? 'selected' : ''}`}
                 onClick={() => toggleSeatSelection(rowIndex, colIndex)}
-                title={`Row ${String.fromCharCode(65 + rowIndex)}, Seat ${colIndex + 1} (${getSeatType(rowIndex).replace('-seat', '')})`}
+                title={`Row ${String.fromCharCode(65 + rowIndex)}, Seat ${colIndex + 1} (${getSeatType(rows[rowIndex]).replace('-seat', '')})`}
               >
                 {String.fromCharCode(65 + rowIndex)}{colIndex + 1}
               </div>
