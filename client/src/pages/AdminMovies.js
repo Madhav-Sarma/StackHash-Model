@@ -17,7 +17,7 @@ function AdminMovies() {
 
   useEffect(() => {
     // Fetch movies from the API
-    axios.get('/api/movies')
+    axios.get('http://localhost:5000/api/movies')
       .then(response => setMovies(response.data))
       .catch(error => console.error('Error fetching movies:', error));
   }, []);
@@ -33,7 +33,7 @@ function AdminMovies() {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Add or update movie via API
-    axios.post('/api/movies', newMovie)
+    axios.post('http://localhost:5000/api/movies', newMovie)
       .then(response => {
         setMovies([...movies, response.data]);
         setNewMovie({
@@ -50,7 +50,7 @@ function AdminMovies() {
   };
 
   const handleDelete = (id) => {
-    axios.delete(`/api/movies/${id}`)
+    axios.delete(`http://localhost:5000/api/movies/${id}`)
       .then(() => {
         setMovies(movies.filter(m => m.id !== id));
       })
@@ -148,25 +148,26 @@ function AdminMovies() {
           </tr>
         </thead>
         <tbody>
-          {movies.map((movie) => (
-            <tr key={movie.id}>
-              <td>{movie.name}</td>
-              <td>{movie.genre}</td>
-              <td>{new Date(movie.releaseDate).toLocaleDateString()}</td>
-              <td>{movie.description}</td>
-              <td>{movie.director}</td>
-              <td>{movie.rating}</td>
-              <td>
-                <img src={movie.imageLink} alt={movie.name} className="movie-image" />
-              </td>
-              <td>
-                <button className="btn btn-danger" onClick={() => handleDelete(movie.id)}>
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
+  {movies.map((movie, index) => (
+    <tr key={movie.id || index}>{/* Use index as a fallback key if id is missing */}
+      <td>{movie.name}</td>
+      <td>{movie.genre}</td>
+      <td>{new Date(movie.releaseDate).toLocaleDateString()}</td>
+      <td>{movie.description}</td>
+      <td>{movie.director}</td>
+      <td>{movie.rating}</td>
+      <td>
+        <img src={movie.imageLink} alt={movie.name} className="movie-image" />
+      </td>
+      <td>
+        <button className="btn btn-danger" onClick={() => handleDelete(movie.id)}>
+          Delete
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
       </table>
     </div>
   );
