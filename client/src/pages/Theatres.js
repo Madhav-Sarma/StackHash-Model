@@ -12,7 +12,7 @@ function Theatres() {
   useEffect(() => {
     const fetchTheatres = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/theatres');
+        const res = await axios.get('https://cinespher.onrender.com/api/theatres');
         setTheatres(res.data);
         setLoading(false);
       } catch (error) {

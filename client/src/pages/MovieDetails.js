@@ -11,7 +11,7 @@ function MovieDetails() {
   useEffect(() => {
     const fetchMovieDetails = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/movies/${name}`);
+        const res = await axios.get(`https://cinespher.onrender.com/api/movies/${name}`);
         setMovie(res.data);
       } catch (error) {
         console.error('Error fetching movie details:', error);

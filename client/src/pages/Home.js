@@ -15,7 +15,7 @@ function Home() {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/movies');
+        const res = await axios.get('https://cinespher.onrender.com/api/movies');
         // Filter to only include released and upcoming movies
         const releasedMovies = res.data.filter(movie => movie.released === '1');
         const upcomingMovies = res.data.filter(movie => movie.released === '0');

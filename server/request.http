@@ -1,5 +1,5 @@
 ###
-POST http://localhost:5000/api/users/register
+POST https://cinespher.onrender.com/api/users/register
 
 {
     "name":"you4",
